@@ -21,9 +21,9 @@ const App = () => {
       {showResolutionForm ? (
         <>
           <div className={`header-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-            <img src={logo} alt='Juzgado PCyF Nº 23' className="header-logo" />
+            <img src={''} alt='Estudio Jurídico De Leo' className="header-logo" />
             <h1 className={`app-header header-text ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-              Juzgado PCyF Nº 23
+              Estudio Jurídico De Leo
             </h1>
           </div>
           <div className="switch-container">
@@ -36,7 +36,7 @@ const App = () => {
             />
           </div>
           <h2 className={`description header-text ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-            Elija el tipo de resolución
+            Elija el tipo de demanda
           </h2>
           <ResolutionForm />
         </>
