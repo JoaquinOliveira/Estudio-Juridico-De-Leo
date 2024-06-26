@@ -1,0 +1,86 @@
+:root {
+  --primary-color: #1890ff;
+  --background-color-light: #f0f2f5;
+  --background-color-dark: #141414;
+  --text-color-light: rgba(0, 0, 0, 0.85);
+  --text-color-dark: rgba(255, 255, 255, 0.85);
+}
+
+.light-mode {
+  --background-color: var(--background-color-light);
+  --text-color: var(--text-color-light);
+}
+
+.dark-mode {
+  --background-color: var(--background-color-dark);
+  --text-color: var(--text-color-dark);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 30px 0px 0px;
+  background-color: var(--background-color);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+}
+
+.app-logo {
+  height: 200px;
+  font: bold;
+  margin-right: 10px;
+}
+
+.app-title {
+  margin: 0;
+
+  color: var(--text-color);
+}
+
+.app-content {
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+  background-color: var(--background-color);
+}
+
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 18px;
+  }
+}
+
+/* Estilos adicionales de Ant Design que quieras sobrescribir */
+.ant-btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.ant-switch-checked {
+  background-color: var(--primary-color);
+}
+.ant-card {
+  transition: none !important;
+}
+
+.ant-card:hover {
+  border-color: transparent !important;
+}
+
+/* Si el problema persiste en modo oscuro */
+body.dark-mode .ant-card:hover,
+.dark-mode .ant-card:hover {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: none !important;
+}
+/* Agrega más sobrescrituras de estilos de Ant Design según sea necesario */

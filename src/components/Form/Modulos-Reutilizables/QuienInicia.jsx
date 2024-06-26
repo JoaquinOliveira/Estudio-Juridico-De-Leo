@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Checkbox } from 'antd';
+import { Form, Select } from 'antd';
 
 const QuienInicia = () => {
     const { Option } = Select;
@@ -13,7 +13,7 @@ const QuienInicia = () => {
             name="quienInicia"
             rules={[{ required: true, message: 'quien inicia es obligatorio' }]}
         >
-            <Select placeholder="Quien Inicia?">
+            <Select placeholder="¿Ana o Agus?">
                 <Option value="ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)">Ana</Option>
                 <Option value="MARIA AGUSTINA LABOURDETTE, abogada, (Tº 23 Fº 934 C.S.J.N.)">Agus</Option>   
             </Select>

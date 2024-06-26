@@ -1,46 +1,44 @@
-// src/utils/docProcessor.js
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
 
-
 export const fillWordTemplate = async (formData, templateUrl) => {
     try {
-        // Realiza la solicitud para obtener el Blob
-        const response = await fetch(templateUrl);
-        if (!response.ok) {
-            throw new Error(`Error al descargar el archivo: ${response.statusText}`);
-        }
+        const proxyUrl = `http://localhost:3001/proxy-document?url=${encodeURIComponent(templateUrl)}`;
+        const response = await fetch(proxyUrl, { responseType: 'arraybuffer' });
         const templateArrayBuffer = await response.arrayBuffer();
 
-        // Crear el documento con PizZip y Docxtemplater
         const zip = new PizZip(templateArrayBuffer);
         const doc = new Docxtemplater(zip, {
             paragraphLoop: true,
             linebreaks: true,
         });
-        // Renderizar el documento con los datos del formulario
-        doc.render(formData);
 
+        // Asegúrate de que todos los campos esperados estén presentes
+        const dataToRender = {
+            quienInicia: formData.quienInicia || '',
+            localidad: formData.localidad || '',
+            nombreDemandado: formData.nombreDemandado || '',
+            domicilioDemandado: formData.domicilioDemandado || '',
+            monto: formData.monto || '',
+            numeroActaInspeccion: formData.numeroActaInspeccion || '',
+            periodos: formData.periodos || '',
+            numeroResolucion: formData.numeroResolucion || '',
+            fechaResolucion: formData.fechaResolucion || '',
+        };
 
-        // Generar el blob final
+        doc.render(dataToRender);
+
         const out = doc.getZip().generate({
             type: 'blob',
             mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         });
-        
 
         return out;
     } catch (error) {
-        if (error.code === 'storage/object-not-found') {
-            throw new Error('El archivo de plantilla no existe en Firebase Storage');
-        } else if (error.code === 'storage/unauthorized') {
-            throw new Error('No tienes permiso para acceder al archivo de plantilla');
-        } else {
-            throw error;
-        }
+        console.error('Error en fillWordTemplate:', error);
+        throw error;
     }
 };
-
 
 export const downloadBlob = (blob, filename) => {
     const link = document.createElement('a');
