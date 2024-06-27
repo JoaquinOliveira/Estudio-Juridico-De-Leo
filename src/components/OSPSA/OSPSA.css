@@ -1,0 +1,23 @@
+.back-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 1;
+}
+
+.ospsa-title {
+    text-align: center;
+    margin-bottom: 24px !important;
+}
+
+@media (max-width: 576px) {
+    .back-button {
+        top: 8px;
+        right: 8px;
+    }
+
+    .ospsa-title {
+        font-size: 20px;
+        margin-top: 24px;
+    }
+}

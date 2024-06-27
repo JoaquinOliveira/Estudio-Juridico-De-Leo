@@ -1,33 +1,32 @@
 import React from 'react';
 import { Layout, Switch, Typography } from 'antd';
 import { BulbOutlined } from '@ant-design/icons';
-import logo from '../utils/logo/logo.png'; // Asegúrate de tener el logo en esta ruta
+import logo from '../utils/logo/logo.png'; // Asegúrate de que la ruta del logo sea correcta
 
-const { Header, Content } = Layout;
+const { Header } = Layout;
 const { Title } = Typography;
 
-const AppLayout = ({ children, darkMode, onToggleDarkMode, onLogoClick }) => (
+const AppLayout = ({ children, darkMode, onToggleDarkMode }) => (
     <Layout className={darkMode ? 'dark-mode' : 'light-mode'}>
         <Header className="app-header">
             <div className="header-content">
-                <div className="logo-title" onClick={onLogoClick} style={{ cursor: 'pointer' }}>
+                <div className="logo-title">
                     <img src={logo} alt="Logo" className="app-logo" />
-                    <Title level={2} className="app-title" style={{marginTop: '15px'}}>
+                    <Title level={3} className="app-title responsive-title">
                         Estudio Jurídico De Leo
                     </Title>
                 </div>
                 <Switch
-                    checkedChildren={<BulbOutlined style={{ fontSize: '12px' }} />}
-                    unCheckedChildren={<BulbOutlined style={{ fontSize: '12px' }} />}
+                    checkedChildren={<BulbOutlined />}
+                    unCheckedChildren={<BulbOutlined />}
                     checked={darkMode}
                     onChange={onToggleDarkMode}
-                    style={{ transform: 'scale(1.2)', marginBottom: '15px' }}
                 />
             </div>
         </Header>
-        <Content className="app-content">
+        <Layout.Content className="app-content">
             {children}
-        </Content>
+        </Layout.Content>
     </Layout>
 );
 

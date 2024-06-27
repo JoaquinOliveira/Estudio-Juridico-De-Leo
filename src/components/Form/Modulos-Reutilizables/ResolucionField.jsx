@@ -16,9 +16,11 @@ const ResolucionField = () => {
       <Form.Item
         label="Número de Resolución"
         name="numeroResolucion"
-        rules={[{ required: true, message: 'Por favor ingrese el número de resolución' }]}
+        rules={[{ required: true, message: 'Por favor ingrese el número de resolución' },
+          { pattern: /^\d+$/, message: 'Por favor ingrese solo números' }
+        ]}
       >
-        <Input placeholder="Ingrese el número de resolución" />
+        <Input type='number' placeholder="Ingrese el número de resolución" />
       </Form.Item>
       <Form.Item
         label="Fecha de Resolución"

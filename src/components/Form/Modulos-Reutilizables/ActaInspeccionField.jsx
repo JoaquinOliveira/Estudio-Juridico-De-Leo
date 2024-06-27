@@ -3,11 +3,14 @@ import { Form, Input } from 'antd';
 
 const ActaInspeccionField = () => (
     <Form.Item
-        label="Número de Acta de Inspección"
         name="numeroActaInspeccion"
-        rules={[{ required: true, message: 'Por favor ingrese el número de acta de inspección' }]}
+        label="Número de Acta de Inspección"
+        rules={[
+            { required: true, message: 'Por favor ingrese el número de acta de inspección' },
+            { pattern: /^\d+$/, message: 'Por favor ingrese solo números' }
+        ]}
     >
-        <Input placeholder="Ingrese el número de acta de inspección" />
+        <Input type="number" placeholder="Ingrese el número de acta de inspección" />
     </Form.Item>
 );
 
