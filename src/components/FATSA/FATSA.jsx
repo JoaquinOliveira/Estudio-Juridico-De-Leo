@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormValidity, handleSubmit, generatePreview } from '../../redux/formSlice';
+import { setFormValidity, generatePreviewForFATSA, handleSubmitForFATSA } from '../../redux/formSlice';
 import BaseForm from '../Form/Modulos-Reutilizables/BaseForm';
 import QuienInicia from '../Form/Modulos-Reutilizables/QuienInicia';
 import LocalidadField from '../Form/Modulos-Reutilizables/LocalidadField';
@@ -75,26 +75,24 @@ const FATSA = ({ onBack }) => {
             tipoDemanda: `FATSA-${subTipoDemanda}`,
             fechaResolucion: values.fechaResolucion ? moment(values.fechaResolucion).format('DD/MM/YYYY') : '',
         };
-        dispatch(handleSubmit(formattedValues));
+        dispatch(handleSubmitForFATSA(formattedValues));
     };
-
     const onPreview = async (values) => {
         try {
             const formattedValues = {
                 ...values,
                 monto: formatMonto(values.monto),
                 periodos: formatPeriodos(values.periodos),
-                tipoDemanda: `FATSA-${subTipoDemanda}`,
                 fechaResolucion: values.fechaResolucion ? moment(values.fechaResolucion).format('DD/MM/YYYY') : '',
+                tipoDemanda: `FATSA-${subTipoDemanda}`,
             };
-            const previewContent = await dispatch(generatePreview(formattedValues)).unwrap();
+            const previewContent = await dispatch(generatePreviewForFATSA(formattedValues)).unwrap();
             return previewContent;
         } catch (error) {
             console.error('Error al generar la vista previa:', error);
             return '<p>Error al generar la vista previa</p>';
         }
     };
-
     return (
         <div style={{ padding: '16px' }}>
             <Card
@@ -124,9 +122,9 @@ const FATSA = ({ onBack }) => {
                         setLocalFormValidity(prevState => prevState && value !== '');
                     }}
                 >
-                    <Option value="42/89">CCT 42/89 - Laboratorios</Option>
-                    <Option value="107/75">CCT 107/75 - Mutualidades</Option>
-                    <Option value="122/75">CCT 122/75 - Geriátricos</Option>
+                    <Option value="42-89">CCT 42/89 - Laboratorios</Option>
+                    <Option value="107">CCT 107/75 - Mutualidades</Option>
+                    <Option value="122">CCT 122/75 - Geriátricos</Option>
                 </Select>
                 <BaseForm
                     onFieldsChange={onFieldsChange}

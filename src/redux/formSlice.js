@@ -1,7 +1,7 @@
 // formSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import obtenerUrlDescarga from '../firebase/firestore';
-import { fillWordTemplate, downloadBlob } from '../utils/docProcessor';
+import { fillWordTemplate, downloadBlob, fillWordTemplateForFATSA } from '../utils/docProcessor';
 import { renderAsync } from 'docx-preview';
 
 export const handleSubmit = createAsyncThunk(
@@ -24,6 +24,50 @@ export const handleSubmit = createAsyncThunk(
         } catch (error) {
             console.error('Error:', error);
             throw new Error('Ha ocurrido un error al enviar el formulario');
+        } finally {
+            dispatch(setSubmitting(false));
+        }
+    }
+);
+
+export const handleSubmitForFATSA = createAsyncThunk(
+    'form/handleSubmitForFATSA',
+    async (values, { dispatch }) => {
+        dispatch(setSubmitting(true));
+        try {
+            const templateName = values.tipoDemanda;
+            dispatch(setLoadingTemplate(true));
+            const modifiedDocument = await fillWordTemplateForFATSA(values, templateName);
+            downloadBlob(modifiedDocument, `${templateName}_modificado.docx`);
+            return 'El formulario se ha enviado correctamente';
+        } catch (error) {
+            console.error('Error:', error);
+            throw new Error('Ha ocurrido un error al enviar el formulario');
+        } finally {
+            dispatch(setSubmitting(false));
+        }
+    }
+);
+
+export const generatePreviewForFATSA = createAsyncThunk(
+    'form/generatePreviewForFATSA',
+    async (values, { dispatch }) => {
+        dispatch(setSubmitting(true));
+        try {
+            const templateName = values.tipoDemanda;
+            dispatch(setLoadingTemplate(true));
+            const modifiedDocument = await fillWordTemplateForFATSA(values, templateName);
+            
+            // Convertir el documento modificado a HTML
+            const previewContainer = document.createElement('div');
+            await renderAsync(modifiedDocument, previewContainer);
+            const previewHtml = previewContainer.innerHTML;
+            
+            dispatch(setLoadingTemplate(false));
+            return previewHtml;
+        } catch (error) {
+            console.error('Error en generatePreviewForFATSA:', error);
+            throw new Error('Ha ocurrido un error al generar la previsualización');
         } finally {
             dispatch(setSubmitting(false));
         }
