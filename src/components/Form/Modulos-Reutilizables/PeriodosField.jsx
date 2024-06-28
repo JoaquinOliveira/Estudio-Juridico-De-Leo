@@ -5,7 +5,6 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 const PeriodosField = () => {
-
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
     const months = [
@@ -19,7 +18,7 @@ const PeriodosField = () => {
                 {(fields, { add, remove }) => (
                     <>
                         {fields.map(({ key, name, ...restField }) => (
-                            <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                            <Space key={key} style={{ display: 'flex', marginBottom: 8, width: '100%' }} align="baseline">
                                 <Form.Item
                                     {...restField}
                                     name={[name, 'mesInicio']}
@@ -65,7 +64,7 @@ const PeriodosField = () => {
                                         ))}
                                     </Select>
                                 </Form.Item>
-                                <MinusCircleOutlined onClick={() => remove(name)} />
+                                <MinusCircleOutlined className="dynamic-delete-button" onClick={() => remove(name)} />
                             </Space>
                         ))}
                         <Form.Item>

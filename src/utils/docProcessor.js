@@ -26,12 +26,18 @@ console.log(templateName)
             paragraphLoop: true,
             linebreaks: true,
         });
-             // Determine quienAutoriza based on quienInicia
-/* let quienAutoriza = '';
+        
+let quienAutoriza = '';
+let cuit = ''
+
 if (formData.quienInicia === "ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
     quienAutoriza = "Dra. María Agustina Labourdette";
+    cuit = '27-12709974-5'
+
 } else if (formData.quienInicia === "MARIA AGUSTINA LABOURDETTE, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
     quienAutoriza = "Dra. Ana María De Leo";
+    cuit = '27-34521458-0'
+   
 }
 
 // Asegúrate de que todos los campos esperados estén presentes
@@ -41,14 +47,15 @@ const dataToRender = {
     nombreDemandado: formData.nombreDemandado || '',
     domicilioDemandado: formData.domicilioDemandado || '',
     monto: formData.monto || '',
-    numeroActaInspeccion: formData.numeroActaInspeccion || '',
+    numeroActaInspeccion: formData.numeroActaInspeccion.join(', ') || '',
     periodos: formData.periodos || '',
     numeroResolucion: formData.numeroResolucion || '',
     fechaResolucion: formData.fechaResolucion || '',
-    personaContraria: quienAutoriza
+    personaContraria: quienAutoriza,
+    cuit: cuit
 };
 
-doc.render(dataToRender); */
+doc.render(dataToRender);
 
 const out = doc.getZip().generate({
     type: 'blob',
@@ -77,12 +84,19 @@ export const fillWordTemplate = async (formData, templateUrl) => {
 
         // Determine quienAutoriza based on quienInicia
         let quienAutoriza = '';
+        let cuit = ''
+        
         if (formData.quienInicia === "ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
             quienAutoriza = "Dra. María Agustina Labourdette";
+            cuit = '27-12709974-5'
+        
         } else if (formData.quienInicia === "MARIA AGUSTINA LABOURDETTE, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
             quienAutoriza = "Dra. Ana María De Leo";
+            cuit = '27-34521458-0'
+           
         }
-
+        
+        
         // Asegúrate de que todos los campos esperados estén presentes
         const dataToRender = {
             quienInicia: formData.quienInicia || '',
@@ -90,20 +104,22 @@ export const fillWordTemplate = async (formData, templateUrl) => {
             nombreDemandado: formData.nombreDemandado || '',
             domicilioDemandado: formData.domicilioDemandado || '',
             monto: formData.monto || '',
-            numeroActaInspeccion: formData.numeroActaInspeccion || '',
+            numeroActaInspeccion: formData.numeroActaInspeccion.join(', '),
+            tieneMultiplesActas: formData.numeroActaInspeccion.length > 1,
             periodos: formData.periodos || '',
             numeroResolucion: formData.numeroResolucion || '',
             fechaResolucion: formData.fechaResolucion || '',
-            personaContraria: quienAutoriza
+            personaContraria: quienAutoriza,
+            cuit: cuit
+            
         };
-
         doc.render(dataToRender);
 
         const out = doc.getZip().generate({
             type: 'blob',
             mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        });
-
+        });  console.log('Número de Acta de Inspección:', dataToRender.numeroActaInspeccion);
+console.log(dataToRender.tieneMultiplesActas)
         return out;
     } catch (error) {
         console.error('Error en fillWordTemplate:', error);

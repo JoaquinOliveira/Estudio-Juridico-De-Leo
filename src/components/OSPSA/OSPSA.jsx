@@ -9,7 +9,7 @@ import MontoField from '../Form/Modulos-Reutilizables/MontoField';
 import ActaInspeccionField from '../Form/Modulos-Reutilizables/ActaInspeccionField';
 import PeriodosField from '../Form/Modulos-Reutilizables/PeriodosField';
 import ResolucionField from '../Form/Modulos-Reutilizables/ResolucionField';
-import { Card, Typography, Button, Row, Col } from 'antd';
+import { Card, Typography, Button, Row, Col, Divider, Form } from 'antd';
 import { NumerosALetras } from 'numero-a-letras';
 import moment from 'moment/moment';
 import { LeftOutlined } from '@ant-design/icons';
@@ -65,8 +65,9 @@ const OSPSA = ({ onBack }) => {
             ...values,
             monto: formatMonto(values.monto),
             periodos: formatPeriodos(values.periodos),
+            numeroActaInspeccion: values.numeroActaInspeccion ? values.numeroActaInspeccion.map(acta => acta.numero) : [],
             fechaResolucion: values.fechaResolucion ? moment(values.fechaResolucion).format('DD/MM/YYYY') : '',
-            tipoDemanda: 'OSPSA', // Agregamos el tipo de demanda
+            tipoDemanda: 'OSPSA',
         };
         dispatch(handleSubmit(formattedValues));
     };
@@ -77,8 +78,9 @@ const OSPSA = ({ onBack }) => {
                 ...values,
                 monto: formatMonto(values.monto),
                 periodos: formatPeriodos(values.periodos),
+                numeroActaInspeccion: values.numeroActaInspeccion ? values.numeroActaInspeccion.map(acta => acta.numero) : [],
                 fechaResolucion: values.fechaResolucion ? moment(values.fechaResolucion).format('DD/MM/YYYY') : '',
-                tipoDemanda: 'OSPSA', // Agregamos el tipo de demanda
+                tipoDemanda: 'OSPSA',
             };
             const previewContent = await dispatch(generatePreview(formattedValues)).unwrap();
             return previewContent;
@@ -87,18 +89,12 @@ const OSPSA = ({ onBack }) => {
             return '<p>Error al generar la vista previa</p>';
         }
     };
+
     return (
-        <div style={{ padding: '16px' }}>
-            <Card
-                style={{
-                    maxWidth: 700,
-                    margin: '0 auto',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                }}
-                bodyStyle={{ padding: '16px', position: 'relative' }}
-            >
-                <Button 
-                    icon={<LeftOutlined />} 
+        <div className="ospsa-container">
+            <Card className="ospsa-card">
+                <Button
+                    icon={<LeftOutlined />}
                     onClick={onBack}
                     type="link"
                     className="back-button"
@@ -117,18 +113,23 @@ const OSPSA = ({ onBack }) => {
                     isSubmitting={isSubmitting}
                     isLoadingTemplate={isLoadingTemplate}
                 >
-                    <Row gutter={[16, 0]}>
-                        <Col xs={24} sm={12}>
+                    <Row gutter={[24, 16]}>
+                        <Col xs={24} md={12}>
                             <QuienInicia />
                             <LocalidadField />
                             <MontoField />
                         </Col>
-                        <Col xs={24} sm={12}>
+                        <Col xs={24} md={12}>
                             <DemandadoField />
-                            <ActaInspeccionField />
                         </Col>
                     </Row>
+                 
+                    <Form.Item label="Actas de Inspección">
+                        <ActaInspeccionField />
+                    </Form.Item>
+        
                     <PeriodosField />
+
                     <ResolucionField />
                 </BaseForm>
             </Card>

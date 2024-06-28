@@ -13,6 +13,7 @@ import DarkLightTheme from './hooks/DarkLightTheme';
 import './theme.css';
 import './global-autocomplete.css';
 
+
 const App = () => {
   const dispatch = useDispatch();
   const tipoResolucion = useSelector((state) => state.form.tipoResolucion);
@@ -43,6 +44,7 @@ const App = () => {
   };
 
   return (
+
     <ConfigProvider
       theme={{
         algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
