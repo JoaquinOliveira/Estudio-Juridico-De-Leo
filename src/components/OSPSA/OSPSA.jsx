@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormValidity, handleSubmit, generatePreview } from '../../redux/formSlice';
+import { setFormValidity, handleSubmit, generatePreview, setTipoResolucion } from '../../redux/formSlice';
 import BaseForm from '../Form/Modulos-Reutilizables/BaseForm';
 import QuienInicia from '../Form/Modulos-Reutilizables/QuienInicia';
 import LocalidadField from '../Form/Modulos-Reutilizables/LocalidadField';
@@ -50,6 +50,11 @@ const OSPSA = ({ onBack }) => {
     const isSubmitting = useSelector((state) => state.form.isSubmitting);
     const isLoadingTemplate = useSelector((state) => state.form.isLoadingTemplate);
     const tipoResolucion = useSelector((state) => state.form.tipoResolucion);
+
+    useEffect(() => {
+        dispatch(setTipoResolucion('OSPSA'));
+    }, [dispatch]);
+
 
     const onFieldsChange = (_, allFields) => {
         const requiredFields = ['quienInicia', 'localidad', 'nombreDemandado', 'domicilioDemandado', 'monto', 'numeroActaInspeccion', 'periodos', 'numeroResolucion', 'fechaResolucion'];

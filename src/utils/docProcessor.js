@@ -71,12 +71,25 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         throw error;
     }
 };
-
-export const fillWordTemplate = async (formData, templateUrl) => {
+export const fillWordTemplate = async (formData, templateName) => {
     try {
+        console.log('Template Name:', templateName);
+        const templateUrl = templateUrls[templateName];
+    
+        if (!templateUrl) {
+            throw new Error(`Template not found for ${templateName}`);
+        }
         console.log('Template URL:', templateUrl);
 
-        const response = await fetch(templateUrl);
+        const response = await fetch(templateUrl, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                'Accept': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            },
+        });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -89,44 +102,23 @@ export const fillWordTemplate = async (formData, templateUrl) => {
             linebreaks: true,
         });
 
-        let quienAutoriza = '';
-        let cuit = '';
-
-        if (formData.quienInicia === "ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
-            quienAutoriza = "Dra. María Agustina Labourdette";
-            cuit = '27-12709974-5';
-        } else if (formData.quienInicia === "MARIA AGUSTINA LABOURDETTE, abogada, (Tº 135 Fº 333 C.S.J.N.)") {
-            quienAutoriza = "Dra. Ana María De Leo";
-            cuit = '27-34521458-0';
-        }
-
-        const dataToRender = {
-            quienInicia: formData.quienInicia || '',
-            localidad: formData.localidad || '',
-            nombreDemandado: formData.nombreDemandado || '',
-            domicilioDemandado: formData.domicilioDemandado || '',
-            monto: formData.monto || '',
-            numeroActaInspeccion: formData.numeroActaInspeccion.join(', '),
-            tieneMultiplesActas: formData.numeroActaInspeccion.length > 1,
-            periodos: formData.periodos || '',
-            numeroResolucion: formData.numeroResolucion || '',
-            fechaResolucion: formData.fechaResolucion || '',
-            personaContraria: quienAutoriza,
-            cuit: cuit
-        };
-
-        doc.render(dataToRender);
+        doc.render(formData);
 
         const out = doc.getZip().generate({
             type: 'blob',
             mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         });
 
-
+        console.log('Document generated successfully');
         return out;
     } catch (error) {
-        console.error('Error en fillWordTemplate:', error);
-        throw error;
+        if (error.code === 'storage/object-not-found') {
+            throw new Error('El archivo de plantilla no existe en Firebase Storage');
+        } else if (error.code === 'storage/unauthorized') {
+            throw new Error('No tienes permiso para acceder al archivo de plantilla');
+        } else {
+            throw error;
+        }
     }
 };
 

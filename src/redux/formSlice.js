@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import obtenerUrlDescarga from '../firebase/firestore';
+/* import obtenerUrlDescarga from '../firebase/firestore'; */
 import { fillWordTemplate, downloadBlob, fillWordTemplateForFATSA } from '../utils/docProcessor';
 import { renderAsync } from 'docx-preview';
+
 
 export const handleSubmit = createAsyncThunk(
     'form/handleSubmit',
@@ -12,12 +13,9 @@ export const handleSubmit = createAsyncThunk(
             if (!tipoResolucion) {
                 throw new Error('El tipo de resolución no está definido');
             }
-            const nombreArchivoPlantilla = `${tipoResolucion}.docx`;
             dispatch(setLoadingTemplate(true));
-            const templateUrl = await obtenerUrlDescarga(nombreArchivoPlantilla);
-            dispatch(setLoadingTemplate(false));
             console.log('Valores antes de fillWordTemplate:', values);
-            const modifiedDocument = await fillWordTemplate(values, templateUrl);
+            const modifiedDocument = await fillWordTemplate(values, tipoResolucion);
             downloadBlob(modifiedDocument, `${tipoResolucion}_modificado.docx`);
             return 'El formulario se ha enviado correctamente';
         } catch (error) {
@@ -25,10 +23,37 @@ export const handleSubmit = createAsyncThunk(
             throw new Error('Ha ocurrido un error al enviar el formulario');
         } finally {
             dispatch(setSubmitting(false));
+            dispatch(setLoadingTemplate(false));
         }
     }
 );
 
+export const generatePreview = createAsyncThunk(
+    'form/generatePreview',
+    async (values, { dispatch, getState }) => {
+        dispatch(setSubmitting(true));
+        try {
+            const tipoResolucion = getState().form.tipoResolucion;
+            if (!tipoResolucion) {
+                throw new Error('El tipo de resolución no está definido');
+            }
+            dispatch(setLoadingTemplate(true));
+            const modifiedDocument = await fillWordTemplate(values, tipoResolucion);
+            
+            const previewContainer = document.createElement('div');
+            await renderAsync(modifiedDocument, previewContainer);
+            const previewHtml = previewContainer.innerHTML;
+            
+            return previewHtml;
+        } catch (error) {
+            console.error('Error en generatePreview:', error);
+            throw new Error('Ha ocurrido un error al generar la previsualización');
+        } finally {
+            dispatch(setSubmitting(false));
+            dispatch(setLoadingTemplate(false));
+        }
+    }
+);
 export const handleSubmitForFATSA = createAsyncThunk(
     'form/handleSubmitForFATSA',
     async (values, { dispatch }) => {
@@ -72,35 +97,6 @@ export const generatePreviewForFATSA = createAsyncThunk(
     }
 );
 
-export const generatePreview = createAsyncThunk(
-    'form/generatePreview',
-    async (values, { dispatch, getState }) => {
-        dispatch(setSubmitting(true));
-        try {
-            const tipoResolucion = getState().form.tipoResolucion;
-            if (!tipoResolucion) {
-                throw new Error('El tipo de resolución no está definido');
-            }
-            const nombreArchivoPlantilla = `${tipoResolucion}.docx`;
-            dispatch(setLoadingTemplate(true));
-            const templateUrl = await obtenerUrlDescarga(nombreArchivoPlantilla);
-            console.log('URL de la plantilla:', templateUrl);
-            const modifiedDocument = await fillWordTemplate(values, templateUrl);
-            
-            const previewContainer = document.createElement('div');
-            await renderAsync(modifiedDocument, previewContainer);
-            const previewHtml = previewContainer.innerHTML;
-            
-            dispatch(setLoadingTemplate(false));
-            return previewHtml;
-        } catch (error) {
-            console.error('Error en generatePreview:', error);
-            throw new Error('Ha ocurrido un error al generar la previsualización');
-        } finally {
-            dispatch(setSubmitting(false));
-        }
-    }
-);
 
 const formSlice = createSlice({
     name: 'form',
