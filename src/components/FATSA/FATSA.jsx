@@ -12,7 +12,7 @@ import ActaInspeccionField from '../Form/Modulos-Reutilizables/ActaInspeccionFie
 import PeriodosField from '../Form/Modulos-Reutilizables/PeriodosField';
 import { Card, Typography, Button, Row, Col, Select, Form } from 'antd';
 import { NumerosALetras } from 'numero-a-letras';
-import moment from 'moment/moment';
+
 import { LeftOutlined } from '@ant-design/icons';
 import './FATSA.css';
 
@@ -80,12 +80,12 @@ const FATSA = ({ onBack }) => {
             numeroActaInspeccion: values.numeroActaInspeccion ? values.numeroActaInspeccion.map(acta => acta.numero) : [],
             personas: values.personas,
             testigos: values.testigos
-            ? values.testigos
-                .split('\n')
-                .filter(testigo => testigo.trim() !== '')
-                .map((testigo, index) => `${index + 1}.- ${testigo.trim()}`)
-                .join(', ')
-            : '',
+                ? values.testigos
+                    .split('\n')
+                    .filter(testigo => testigo.trim() !== '')
+                    .map((testigo, index) => `${index + 1}.- ${testigo.trim()}`)
+                    .join(', ')
+                : '',
             cuotas: values.cuotas,
         };
         dispatch(handleSubmitForFATSA(formattedValues));
@@ -100,12 +100,12 @@ const FATSA = ({ onBack }) => {
                 numeroActaInspeccion: values.numeroActaInspeccion ? values.numeroActaInspeccion.map(acta => acta.numero) : [],
                 personas: values.personas,
                 testigos: values.testigos
-                ? values.testigos
-                    .split('\n')
-                    .filter(testigo => testigo.trim() !== '')
-                    .map((testigo, index) => `${index + 1}.- ${testigo.trim()}`)
-                    .join(', ')
-                : '',
+                    ? values.testigos
+                        .split('\n')
+                        .filter(testigo => testigo.trim() !== '')
+                        .map((testigo, index) => `${index + 1}.- ${testigo.trim()}`)
+                        .join(', ')
+                    : '',
                 cuotas: values.cuotas,
             };
             const previewContent = await dispatch(generatePreviewForFATSA(formattedValues)).unwrap();

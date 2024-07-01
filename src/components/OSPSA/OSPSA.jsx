@@ -9,7 +9,7 @@ import MontoField from '../Form/Modulos-Reutilizables/MontoField';
 import ActaInspeccionField from '../Form/Modulos-Reutilizables/ActaInspeccionField';
 import PeriodosField from '../Form/Modulos-Reutilizables/PeriodosField';
 import ResolucionField from '../Form/Modulos-Reutilizables/ResolucionField';
-import { Card, Typography, Button, Row, Col, Divider, Form } from 'antd';
+import { Card, Typography, Button, Row, Col, Form } from 'antd';
 import { NumerosALetras } from 'numero-a-letras';
 import moment from 'moment/moment';
 import { LeftOutlined } from '@ant-design/icons';
