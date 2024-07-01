@@ -9,7 +9,7 @@ const templateUrls = {
 };
 
 export const fillWordTemplateForFATSA = async (formData, templateName) => {
-    console.log('Template Name:', templateName);
+
     try {
         const templateUrl = templateUrls[templateName];
         if (!templateUrl) {
@@ -73,13 +73,13 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
 };
 export const fillWordTemplate = async (formData, templateName) => {
     try {
-        console.log('Template Name:', templateName);
+
         const templateUrl = templateUrls[templateName];
     
         if (!templateUrl) {
             throw new Error(`Template not found for ${templateName}`);
         }
-        console.log('Template URL:', templateUrl);
+
 
         const response = await fetch(templateUrl, {
             method: 'GET',
@@ -109,7 +109,6 @@ export const fillWordTemplate = async (formData, templateName) => {
             mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         });
 
-        console.log('Document generated successfully');
         return out;
     } catch (error) {
         if (error.code === 'storage/object-not-found') {

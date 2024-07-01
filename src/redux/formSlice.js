@@ -14,7 +14,7 @@ export const handleSubmit = createAsyncThunk(
                 throw new Error('El tipo de resolución no está definido');
             }
             dispatch(setLoadingTemplate(true));
-            console.log('Valores antes de fillWordTemplate:', values);
+            
             const modifiedDocument = await fillWordTemplate(values, tipoResolucion);
             downloadBlob(modifiedDocument, `${tipoResolucion}_modificado.docx`);
             return 'El formulario se ha enviado correctamente';
@@ -85,7 +85,7 @@ export const generatePreviewForFATSA = createAsyncThunk(
             const previewContainer = document.createElement('div');
             await renderAsync(modifiedDocument, previewContainer);
             const previewHtml = previewContainer.innerHTML;
-            console.log(values);
+     
             dispatch(setLoadingTemplate(false));
             return previewHtml;
         } catch (error) {
@@ -118,7 +118,7 @@ const formSlice = createSlice({
             state.isLoadingTemplate = action.payload;
         },
         setTipoResolucion: (state, action) => {
-            console.log('Reducer: Setting tipoResolucion to:', action.payload);
+
             state.tipoResolucion = action.payload;
         },
         setPreviewUrl: (state, action) => {
