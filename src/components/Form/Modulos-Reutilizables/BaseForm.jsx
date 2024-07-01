@@ -55,7 +55,7 @@ const BaseForm = ({
                                 type="default"
                                 icon={<EyeOutlined />}
                                 onClick={handlePreview}
-                                disabled={!isFormValid || isSubmitting || isLoadingTemplate}
+                                /* disabled={!isFormValid || isSubmitting || isLoadingTemplate} */
                                 size="large"
                                 block
                             >

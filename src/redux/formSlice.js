@@ -62,7 +62,7 @@ export const generatePreviewForFATSA = createAsyncThunk(
             const previewContainer = document.createElement('div');
             await renderAsync(modifiedDocument, previewContainer);
             const previewHtml = previewContainer.innerHTML;
-            
+            console.log(values)
             dispatch(setLoadingTemplate(false));
             return previewHtml;
         } catch (error) {

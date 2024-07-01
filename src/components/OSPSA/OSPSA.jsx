@@ -123,13 +123,10 @@ const OSPSA = ({ onBack }) => {
                             <DemandadoField />
                         </Col>
                     </Row>
-                 
                     <Form.Item label="Actas de Inspección">
                         <ActaInspeccionField />
                     </Form.Item>
-        
                     <PeriodosField />
-
                     <ResolucionField />
                 </BaseForm>
             </Card>

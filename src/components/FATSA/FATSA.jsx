@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFormValidity, generatePreviewForFATSA, handleSubmitForFATSA } from '../../redux/formSlice';
 import BaseForm from '../Form/Modulos-Reutilizables/BaseForm';
 import QuienInicia from '../Form/Modulos-Reutilizables/QuienInicia';
-import LocalidadField from '../Form/Modulos-Reutilizables/LocalidadField';
+import PersonasField from '../Form/Modulos-Reutilizables/PersonasField'
+import TestigosField from '../Form/Modulos-Reutilizables/TestigosField'
+import CuotasField from '../Form/Modulos-Reutilizables/CuotasField'
 import DemandadoField from '../Form/Modulos-Reutilizables/DemandadoField';
 import MontoField from '../Form/Modulos-Reutilizables/MontoField';
 import ActaInspeccionField from '../Form/Modulos-Reutilizables/ActaInspeccionField';
 import PeriodosField from '../Form/Modulos-Reutilizables/PeriodosField';
-import ResolucionField from '../Form/Modulos-Reutilizables/ResolucionField';
-import { Card, Typography, Button, Row, Col, Select } from 'antd';
+import { Card, Typography, Button, Row, Col, Select, Form } from 'antd';
 import { NumerosALetras } from 'numero-a-letras';
 import moment from 'moment/moment';
 import { LeftOutlined } from '@ant-design/icons';
@@ -55,13 +56,16 @@ const FATSA = ({ onBack }) => {
     const [localFormValidity, setLocalFormValidity] = useState(false);
 
     const onFieldsChange = (_, allFields) => {
-        const requiredFields = ['quienInicia', 'localidad', 'nombreDemandado', 'domicilioDemandado', 'monto', 'numeroActaInspeccion', 'periodos', 'numeroResolucion', 'fechaResolucion'];
+        const requiredFields = ['quienInicia', 'nombreDemandado', 'domicilioDemandado', 'monto', 'numeroActaInspeccion', 'periodos', 'numeroResolucion', 'fechaResolucion'];
         const isValid = requiredFields.every((field) => {
             const fieldValue = allFields.find((f) => f.name[0] === field);
             return fieldValue && fieldValue.errors.length === 0 && fieldValue.touched;
         });
         setLocalFormValidity(isValid && subTipoDemanda !== '');
     };
+    useEffect(() => {
+        console.log('FATSA component state:', { isFormValid, isSubmitting, isLoadingTemplate });
+    }, [isFormValid, isSubmitting, isLoadingTemplate]);
 
     useEffect(() => {
         dispatch(setFormValidity(localFormValidity));
@@ -73,7 +77,16 @@ const FATSA = ({ onBack }) => {
             monto: formatMonto(values.monto),
             periodos: formatPeriodos(values.periodos),
             tipoDemanda: `FATSA-${subTipoDemanda}`,
-            fechaResolucion: values.fechaResolucion ? moment(values.fechaResolucion).format('DD/MM/YYYY') : '',
+            numeroActaInspeccion: values.numeroActaInspeccion ? values.numeroActaInspeccion.map(acta => acta.numero) : [],
+            personas: values.personas,
+            testigos: values.testigos
+            ? values.testigos
+                .split('\n')
+                .filter(testigo => testigo.trim() !== '')
+                .map((testigo, index) => `${index + 1}.- ${testigo.trim()}`)
+                .join(', ')
+            : '',
+            cuotas: values.cuotas,
         };
         dispatch(handleSubmitForFATSA(formattedValues));
     };
@@ -83,8 +96,17 @@ const FATSA = ({ onBack }) => {
                 ...values,
                 monto: formatMonto(values.monto),
                 periodos: formatPeriodos(values.periodos),
-                fechaResolucion: values.fechaResolucion ? moment(values.fechaResolucion).format('DD/MM/YYYY') : '',
                 tipoDemanda: `FATSA-${subTipoDemanda}`,
+                numeroActaInspeccion: values.numeroActaInspeccion ? values.numeroActaInspeccion.map(acta => acta.numero) : [],
+                personas: values.personas,
+                testigos: values.testigos
+                ? values.testigos
+                    .split('\n')
+                    .filter(testigo => testigo.trim() !== '')
+                    .map((testigo, index) => `${index + 1}.- ${testigo.trim()}`)
+                    .join(', ')
+                : '',
+                cuotas: values.cuotas,
             };
             const previewContent = await dispatch(generatePreviewForFATSA(formattedValues)).unwrap();
             return previewContent;
@@ -94,26 +116,19 @@ const FATSA = ({ onBack }) => {
         }
     };
     return (
-        <div style={{ padding: '16px' }}>
-            <Card
-                style={{
-                    maxWidth: 700,
-                    margin: '0 auto',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                }}
-                bodyStyle={{ padding: '16px', position: 'relative' }}
-            >
-                <Title level={3} className="fatsa-title">
-                    FATSA
-                </Title>
-                <Button 
-                    icon={<LeftOutlined />} 
+        <div className="ospsa-container">
+            <Card className="ospsa-card">
+                <Button
+                    icon={<LeftOutlined />}
                     onClick={onBack}
                     type="link"
                     className="back-button"
                 >
                     Volver
                 </Button>
+                <Title level={3} className="ospsa-title">
+                    FATSA
+                </Title>
                 <Select
                     style={{ width: '100%', marginBottom: '16px' }}
                     placeholder="Seleccione el subtipo de demanda FATSA"
@@ -130,23 +145,25 @@ const FATSA = ({ onBack }) => {
                     onFieldsChange={onFieldsChange}
                     onFinish={onFinish}
                     onPreview={onPreview}
-                    isFormValid={localFormValidity}
                     isSubmitting={isSubmitting}
                     isLoadingTemplate={isLoadingTemplate}
                 >
-                    <Row gutter={[16, 0]}>
-                        <Col xs={24} sm={12}>
+                    <Row gutter={[24, 16]}>
+                        <Col xs={24} md={12}>
                             <QuienInicia />
-                            <LocalidadField />
                             <MontoField />
                         </Col>
-                        <Col xs={24} sm={12}>
+                        <Col xs={24} md={12}>
                             <DemandadoField />
-                            <ActaInspeccionField />
                         </Col>
                     </Row>
+                    <Form.Item label="Actas de Inspección">
+                        <ActaInspeccionField />
+                    </Form.Item>
                     <PeriodosField />
-                    <ResolucionField />
+                    <CuotasField />
+                    <PersonasField />
+                    <TestigosField />
                 </BaseForm>
             </Card>
         </div>
