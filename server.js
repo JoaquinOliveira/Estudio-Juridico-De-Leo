@@ -7,7 +7,7 @@ const app = express();
 
 app.use(cors());
 
-app.get('/proxy-document', async (req, res) => {
+app.get('api/proxy-document', async (req, res) => {
   try {
     const url = req.query.url;
     const response = await axios.get(url, { responseType: 'arraybuffer' });
