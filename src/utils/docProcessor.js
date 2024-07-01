@@ -8,7 +8,8 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         const templateUrls = {
             'FATSA-107': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-107.docx?alt=media&token=a4514273-015b-4af0-8459-6268ad4c41f6',
             'FATSA-122': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-122.docx?alt=media&token=23307c2e-bc45-4a8a-8031-e7c452664d0f',
-            'FATSA-42-89': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-42-89.docx?alt=media&token=0a6d4bef-e9f9-490f-8f9f-e26a1d3db80d'
+            'FATSA-42-89': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-42-89.docx?alt=media&token=0a6d4bef-e9f9-490f-8f9f-e26a1d3db80d',
+            'OSPSA': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/OSPSA.docx?alt=media&token=5f59ee8f-a016-44bb-bdd8-aae6d03b5892',
         };
 
         const templateUrl = templateUrls[templateName];
@@ -74,10 +75,31 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
 };
 
 
-export const fillWordTemplate = async (formData, templateUrl) => {
+export const fillWordTemplate = async (formData, templateName) => {
     try {
-       
-        const response = await fetch(templateUrl, { responseType: 'arraybuffer' });
+        const templateUrls = {
+            'FATSA-107': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-107.docx?alt=media&token=a4514273-015b-4af0-8459-6268ad4c41f6',
+            'FATSA-122': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-122.docx?alt=media&token=23307c2e-bc45-4a8a-8031-e7c452664d0f',
+            'FATSA-42-89': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-42-89.docx?alt=media&token=0a6d4bef-e9f9-490f-8f9f-e26a1d3db80d',
+            'OSPSA': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/OSPSA.docx?alt=media&token=5f59ee8f-a016-44bb-bdd8-aae6d03b5892',
+        };
+        const templateUrl = templateUrls[templateName];
+        if (!templateUrl) {
+            throw new Error(`Template not found for ${templateName}`);
+        }
+
+        console.log('Template URL:', templateUrl);
+
+        const response = await fetch(templateUrl, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const templateArrayBuffer = await response.arrayBuffer();
 
         const zip = new PizZip(templateArrayBuffer);
