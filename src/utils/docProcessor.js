@@ -78,8 +78,16 @@ export const fillWordTemplate = async (formData, templateUrl) => {
     try {
         const proxyUrl = `/api/proxy-document?url=${encodeURIComponent(templateUrl)}`;
         const response = await fetch(proxyUrl, { responseType: 'arraybuffer' });
+        if (!response.ok) {
+          throw new Error(`Error al descargar la plantilla: ${response.status} - ${response.statusText}`);
+        }
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+          throw new Error('El archivo descargado no es un archivo .docx válido');
+        }
         const templateArrayBuffer = await response.arrayBuffer();
 
+        
         const zip = new PizZip(templateArrayBuffer);
         const doc = new Docxtemplater(zip, {
             paragraphLoop: true,
