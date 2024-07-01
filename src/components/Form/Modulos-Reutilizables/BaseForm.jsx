@@ -65,7 +65,7 @@ const BaseForm = ({
                                 type="primary"
                                 icon={<DownloadOutlined />}
                                 htmlType="submit"
-                                disabled={!isFormValid || isSubmitting || isLoadingTemplate}
+                               /*  disabled={!isFormValid || isSubmitting || isLoadingTemplate} */
                                 size="large"
                             >
                                 Descargar
