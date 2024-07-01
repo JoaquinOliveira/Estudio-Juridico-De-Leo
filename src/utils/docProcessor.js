@@ -12,7 +12,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         };
 
         const templateUrl = templateUrls[templateName];
-        const proxyUrl = `http://localhost:3001/proxy-document?url=${encodeURIComponent(templateUrl)}`;
+        const proxyUrl = `/.netlify/functions/proxy-document?url=${encodeURIComponent(templateUrl)}`;
         const response = await fetch(proxyUrl, { responseType: 'arraybuffer' });
 
         if (!response.ok) {
@@ -76,7 +76,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
 
 export const fillWordTemplate = async (formData, templateUrl) => {
     try {
-        const proxyUrl = `http://localhost:3001/proxy-document?url=${encodeURIComponent(templateUrl)}`;
+        const proxyUrl = `/.netlify/functions/proxy-document?url=${encodeURIComponent(templateUrl)}`;
         const response = await fetch(proxyUrl, { responseType: 'arraybuffer' });
         const templateArrayBuffer = await response.arrayBuffer();
 
