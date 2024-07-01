@@ -76,7 +76,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
 
 export const fillWordTemplate = async (formData, templateUrl) => {
     try {
-        const proxyUrl = `/.netlify/functions/proxy-document?url=${encodeURIComponent(templateUrl)}`;
+       
         const response = await fetch(templateUrl, { responseType: 'arraybuffer' });
         const templateArrayBuffer = await response.arrayBuffer();
 
