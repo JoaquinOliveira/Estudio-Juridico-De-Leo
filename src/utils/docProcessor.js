@@ -12,8 +12,8 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         };
 
         const templateUrl = templateUrls[templateName];
-        const proxyUrl = `/.netlify/functions/proxy-document?url=${encodeURIComponent(templateUrl)}`;
-        const response = await fetch(proxyUrl, { responseType: 'arraybuffer' });
+       
+        const response = await fetch(templateUrl, { responseType: 'arraybuffer' });
 
         if (!response.ok) {
             throw new Error(`Error al descargar la plantilla: ${response.status} - ${response.statusText}`);
@@ -77,7 +77,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
 export const fillWordTemplate = async (formData, templateUrl) => {
     try {
         const proxyUrl = `/.netlify/functions/proxy-document?url=${encodeURIComponent(templateUrl)}`;
-        const response = await fetch(proxyUrl, { responseType: 'arraybuffer' });
+        const response = await fetch(templateUrl, { responseType: 'arraybuffer' });
         const templateArrayBuffer = await response.arrayBuffer();
 
         const zip = new PizZip(templateArrayBuffer);
