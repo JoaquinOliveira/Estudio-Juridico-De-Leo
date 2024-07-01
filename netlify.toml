@@ -3,6 +3,6 @@ command = "npm run build"
 publish = "build"
 
 [[redirects]]
-from = "/*"
-to = "/index.html"
+from = "/api/proxy-document"
+to = "/.netlify/functions/proxy-document"
 status = 200
