@@ -1,4 +1,3 @@
-// formSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import obtenerUrlDescarga from '../firebase/firestore';
 import { fillWordTemplate, downloadBlob, fillWordTemplateForFATSA } from '../utils/docProcessor';
@@ -58,11 +57,10 @@ export const generatePreviewForFATSA = createAsyncThunk(
             dispatch(setLoadingTemplate(true));
             const modifiedDocument = await fillWordTemplateForFATSA(values, templateName);
             
-            // Convertir el documento modificado a HTML
             const previewContainer = document.createElement('div');
             await renderAsync(modifiedDocument, previewContainer);
             const previewHtml = previewContainer.innerHTML;
-            console.log(values)
+            console.log(values);
             dispatch(setLoadingTemplate(false));
             return previewHtml;
         } catch (error) {
@@ -86,10 +84,9 @@ export const generatePreview = createAsyncThunk(
             const nombreArchivoPlantilla = `${tipoResolucion}.docx`;
             dispatch(setLoadingTemplate(true));
             const templateUrl = await obtenerUrlDescarga(nombreArchivoPlantilla);
-            console.log('URL de la plantilla:', templateUrl); // Agregar este log
+            console.log('URL de la plantilla:', templateUrl);
             const modifiedDocument = await fillWordTemplate(values, templateUrl);
             
-            // Convertir el documento modificado a HTML
             const previewContainer = document.createElement('div');
             await renderAsync(modifiedDocument, previewContainer);
             const previewHtml = previewContainer.innerHTML;
@@ -114,7 +111,6 @@ const formSlice = createSlice({
         draftData: null,
         tipoResolucion: '',
     },
-
     reducers: {
         setFormValidity: (state, action) => {
             state.isFormValid = action.payload;
@@ -130,11 +126,9 @@ const formSlice = createSlice({
             state.tipoResolucion = action.payload;
         },
         setPreviewUrl: (state, action) => {
-            ; //
             state.previewBlob = action.payload;
         },
     },
-
 });
 
 export const { setFormValidity, setSubmitting, setLoadingTemplate, setTipoResolucion, setPreviewBlob } = formSlice.actions;

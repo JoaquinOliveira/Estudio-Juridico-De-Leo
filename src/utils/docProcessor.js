@@ -1,21 +1,22 @@
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
 
+const templateUrls = {
+    'FATSA-107': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-107.docx?alt=media&token=a4514273-015b-4af0-8459-6268ad4c41f6',
+    'FATSA-122': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-122.docx?alt=media&token=23307c2e-bc45-4a8a-8031-e7c452664d0f',
+    'FATSA-42-89': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-42-89.docx?alt=media&token=0a6d4bef-e9f9-490f-8f9f-e26a1d3db80d',
+    'OSPSA': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/OSPSA.docx?alt=media&token=5f59ee8f-a016-44bb-bdd8-aae6d03b5892',
+};
 
 export const fillWordTemplateForFATSA = async (formData, templateName) => {
-    console.log(templateName)
+    console.log('Template Name:', templateName);
     try {
-        const templateUrls = {
-            'FATSA-107': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-107.docx?alt=media&token=a4514273-015b-4af0-8459-6268ad4c41f6',
-            'FATSA-122': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-122.docx?alt=media&token=23307c2e-bc45-4a8a-8031-e7c452664d0f',
-            'FATSA-42-89': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-42-89.docx?alt=media&token=0a6d4bef-e9f9-490f-8f9f-e26a1d3db80d',
-            'OSPSA': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/OSPSA.docx?alt=media&token=5f59ee8f-a016-44bb-bdd8-aae6d03b5892',
-        };
-
         const templateUrl = templateUrls[templateName];
-       
-        const response = await fetch(templateUrl, { responseType: 'arraybuffer' });
+        if (!templateUrl) {
+            throw new Error(`Template not found for ${templateName}`);
+        }
 
+        const response = await fetch(templateUrl);
         if (!response.ok) {
             throw new Error(`Error al descargar la plantilla: ${response.status} - ${response.statusText}`);
         }
@@ -29,19 +30,16 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         });
 
         let quienAutoriza = '';
-        let cuit = ''
+        let cuit = '';
 
         if (formData.quienInicia === "ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
             quienAutoriza = "Dra. María Agustina Labourdette";
-            cuit = '27-12709974-5'
-
+            cuit = '27-12709974-5';
         } else if (formData.quienInicia === "MARIA AGUSTINA LABOURDETTE, abogada, (Tº 119 Fº 05 C.P.A.C.F.)") {
             quienAutoriza = "Dra. Ana María De Leo";
-            cuit = '27-34521458-0'
-
+            cuit = '27-34521458-0';
         }
 
-        // Asegúrate de que todos los campos esperados estén presentes
         const dataToRender = {
             quienInicia: formData.quienInicia || '',
             localidad: formData.localidad || '',
@@ -69,27 +67,16 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
 
         return out;
     } catch (error) {
-        console.error('Error en fillWordTemplate:', error);
+        console.error('Error en fillWordTemplateForFATSA:', error);
         throw error;
     }
 };
 
-
 export const fillWordTemplate = async (formData, templateUrl) => {
     try {
-        
-        if (!templateUrl) {
-            throw new Error(`Template not found for ${templateUrl}`);
-        }
-
         console.log('Template URL:', templateUrl);
 
-        const response = await fetch(templateUrl, {
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'include'
-        });
-
+        const response = await fetch(templateUrl);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -102,22 +89,17 @@ export const fillWordTemplate = async (formData, templateUrl) => {
             linebreaks: true,
         });
 
-        // Determine quienAutoriza based on quienInicia
         let quienAutoriza = '';
-        let cuit = ''
+        let cuit = '';
 
         if (formData.quienInicia === "ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
             quienAutoriza = "Dra. María Agustina Labourdette";
-            cuit = '27-12709974-5'
-
+            cuit = '27-12709974-5';
         } else if (formData.quienInicia === "MARIA AGUSTINA LABOURDETTE, abogada, (Tº 135 Fº 333 C.S.J.N.)") {
             quienAutoriza = "Dra. Ana María De Leo";
-            cuit = '27-34521458-0'
-
+            cuit = '27-34521458-0';
         }
 
-
-        // Asegúrate de que todos los campos esperados estén presentes
         const dataToRender = {
             quienInicia: formData.quienInicia || '',
             localidad: formData.localidad || '',
@@ -131,15 +113,16 @@ export const fillWordTemplate = async (formData, templateUrl) => {
             fechaResolucion: formData.fechaResolucion || '',
             personaContraria: quienAutoriza,
             cuit: cuit
-
         };
+
         doc.render(dataToRender);
 
         const out = doc.getZip().generate({
             type: 'blob',
             mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        }); console.log('Número de Acta de Inspección:', dataToRender.numeroActaInspeccion);
-        console.log(dataToRender.tieneMultiplesActas)
+        });
+
+
         return out;
     } catch (error) {
         console.error('Error en fillWordTemplate:', error);
