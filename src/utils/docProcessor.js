@@ -39,6 +39,9 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
             quienAutoriza = "Dra. Ana María De Leo";
             cuit = '27-34521458-0';
         }
+        console.log(cuit)
+        console.log(quienAutoriza)
+        
 
         const dataToRender = {
             quienInicia: formData.quienInicia || '',
@@ -59,7 +62,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         };
 
         doc.render(dataToRender);
-
+console.log(dataToRender)
         const out = doc.getZip().generate({
             type: 'blob',
             mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',

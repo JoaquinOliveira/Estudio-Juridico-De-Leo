@@ -15,7 +15,7 @@ const QuienInicia = () => {
         >
             <Select placeholder="¿Ana o Agus?">
                 <Option value="ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)">Ana</Option>
-                <Option value="MARIA AGUSTINA LABOURDETTE, abogada, (Tº 23 Fº 934 C.S.J.N.)">Agus</Option>   
+                <Option value="MARIA AGUSTINA LABOURDETTE, abogada, (Tº 119 Fº 05 C.P.A.C.F.)">Agus</Option>   
             </Select>
         </Form.Item>
     );
