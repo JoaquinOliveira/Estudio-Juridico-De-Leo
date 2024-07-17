@@ -62,7 +62,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         };
 
         doc.render(dataToRender);
-console.log(dataToRender)
+
         const out = doc.getZip().generate({
             type: 'blob',
             mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -76,25 +76,14 @@ console.log(dataToRender)
 };
 export const fillWordTemplate = async (formData, templateName) => {
     try {
-
         const templateUrl = templateUrls[templateName];
-    
         if (!templateUrl) {
             throw new Error(`Template not found for ${templateName}`);
         }
 
-
-        const response = await fetch(templateUrl, {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache',
-            headers: {
-                'Accept': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            },
-        });
-
+        const response = await fetch(templateUrl);
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Error al descargar la plantilla: ${response.status} - ${response.statusText}`);
         }
 
         const templateArrayBuffer = await response.arrayBuffer();
@@ -105,7 +94,40 @@ export const fillWordTemplate = async (formData, templateName) => {
             linebreaks: true,
         });
 
-        doc.render(formData);
+        let quienAutoriza = '';
+        let cuit = '';
+
+        if (formData.quienInicia === "ANA MARIA DE LEO, abogada, (Tº 23 Fº 934 C.S.J.N.)") {
+            quienAutoriza = "Dra. María Agustina Labourdette";
+            cuit = '27-12709974-5';
+        } else if (formData.quienInicia === "MARIA AGUSTINA LABOURDETTE, abogada, (Tº 119 Fº 05 C.P.A.C.F.)") {
+            formData.quienInicia = "MARIA AGUSTINA LABOURDETTE, abogada, (Tº 135 Fº 333 C.F.S.M)";
+            quienAutoriza = "Dra. Ana María De Leo";
+            cuit = '27-34521458-0';
+        }
+        console.log(cuit)
+        console.log(quienAutoriza)
+        
+
+        const dataToRender = {
+            quienInicia: formData.quienInicia || '',
+            localidad: formData.localidad || '',
+            nombreDemandado: formData.nombreDemandado || '',
+            domicilioDemandado: formData.domicilioDemandado || '',
+            monto: formData.monto || '',
+            numeroActaInspeccion: formData.numeroActaInspeccion.join(', ') || '',
+            tieneMultiplesActas: formData.numeroActaInspeccion.length > 1,
+            periodos: formData.periodos || '',
+            numeroResolucion: formData.numeroResolucion || '',
+            fechaResolucion: formData.fechaResolucion || '',
+            personaContraria: quienAutoriza,
+            cuit: cuit,
+            personas: formData.personas,
+            testigos: formData.testigos,
+            cuotas: formData.cuotas,
+        };
+
+        doc.render(dataToRender);
 
         const out = doc.getZip().generate({
             type: 'blob',

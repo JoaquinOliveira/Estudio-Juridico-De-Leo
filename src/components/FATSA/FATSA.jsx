@@ -48,7 +48,7 @@ const formatMonto = (monto) => {
 
 const FATSA = ({ onBack }) => {
     const dispatch = useDispatch();
-    const isFormValid = useSelector((state) => state.form.isFormValid);
+
     const isSubmitting = useSelector((state) => state.form.isSubmitting);
     const isLoadingTemplate = useSelector((state) => state.form.isLoadingTemplate);
 
@@ -63,10 +63,7 @@ const FATSA = ({ onBack }) => {
         });
         setLocalFormValidity(isValid && subTipoDemanda !== '');
     };
-    useEffect(() => {
-        console.log('FATSA component state:', { isFormValid, isSubmitting, isLoadingTemplate });
-    }, [isFormValid, isSubmitting, isLoadingTemplate]);
-
+ 
     useEffect(() => {
         dispatch(setFormValidity(localFormValidity));
     }, [localFormValidity, dispatch]);
