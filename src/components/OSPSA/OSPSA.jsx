@@ -84,7 +84,9 @@ const OSPSA = ({ onBack }) => {
                 monto: formatMonto(values.monto),
                 periodos: formatPeriodos(values.periodos),
                 numeroActaInspeccion: values.numeroActaInspeccion ? values.numeroActaInspeccion.map(acta => acta.numero) : [],
-                fechaResolucion: values.fechaResolucion ? moment(values.fechaResolucion).format('DD/MM/YYYY') : '',
+                fechaResolucion: values.fechaResolucion ?
+                    `${values.fechaResolucion.dia.toString().padStart(2, '0')}/${values.fechaResolucion.mes.toString().padStart(2, '0')}/${values.fechaResolucion.año}` :
+                    '',
                 tipoDemanda: 'OSPSA',
             };
             const previewContent = await dispatch(generatePreview(formattedValues)).unwrap();

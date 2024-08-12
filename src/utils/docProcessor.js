@@ -76,6 +76,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
 };
 export const fillWordTemplate = async (formData, templateName) => {
     try {
+        console.log(formData)
         const templateUrl = templateUrls[templateName];
         if (!templateUrl) {
             throw new Error(`Template not found for ${templateName}`);
@@ -108,7 +109,6 @@ export const fillWordTemplate = async (formData, templateName) => {
         console.log(cuit)
         console.log(quienAutoriza)
         
-
         const dataToRender = {
             quienInicia: formData.quienInicia || '',
             localidad: formData.localidad || '',
@@ -126,7 +126,8 @@ export const fillWordTemplate = async (formData, templateName) => {
             testigos: formData.testigos,
             cuotas: formData.cuotas,
         };
-
+        
+        console.log(formData.fechaResolucion)        
         doc.render(dataToRender);
 
         const out = doc.getZip().generate({
