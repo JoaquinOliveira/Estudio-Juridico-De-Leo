@@ -9,7 +9,7 @@ import MontoField from '../Form/Modulos-Reutilizables/MontoField';
 import Apoderada from '../Form/Modulos-Reutilizables/ApoderadaField';
 import PeriodosField from '../Form/Modulos-Reutilizables/PeriodosField';
 import VenceField from '../Form/Modulos-Reutilizables/VenceField'
-import { Card, Typography, Button, Row, Col, Select, Form } from 'antd';
+import { Card, Typography, Button, Select, Form } from 'antd';
 import { NumerosALetras } from 'numero-a-letras';
 import { LeftOutlined } from '@ant-design/icons';
 import './ACUERDOS.css';
