@@ -22,7 +22,7 @@ const FormSelection = ({ onSelectForm, darkMode }) => {
                     Seleccione el tipo de demanda
                 </Title>
                 <Row gutter={[16, 16]} justify="center">
-                    <Col xs={24} sm={12} md={8}>
+                <Col xs={48} sm={24} md={16}>
                         <Button
                             type="primary"
                             icon={<FileTextOutlined />}
@@ -34,7 +34,7 @@ const FormSelection = ({ onSelectForm, darkMode }) => {
                             OSPSA
                         </Button>
                     </Col>
-                    <Col xs={24} sm={12} md={8}>
+                    <Col xs={48} sm={24} md={16}>
                         <Button
                             type="primary"
                             icon={<FormOutlined />}
@@ -46,7 +46,19 @@ const FormSelection = ({ onSelectForm, darkMode }) => {
                             FATSA
                         </Button>
                     </Col>
-                    <Col xs={24} sm={12} md={8}>
+                    <Col xs={48} sm={24} md={16}>
+                        <Button
+                            type="primary"
+                            icon={<FormOutlined />}
+                            onClick={() => handleSelectForm('ACUERDOS')}
+                            size="large"
+                            block
+                            style={{ height: '60px', fontSize: '18px' }}
+                        >
+                            CONVENIOS
+                        </Button>
+                    </Col>
+                    <Col xs={48} sm={24} md={16}>
                         <Button
                             type="default"
                             icon={<QuestionCircleOutlined />}

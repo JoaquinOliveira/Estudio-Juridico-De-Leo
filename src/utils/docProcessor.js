@@ -6,6 +6,7 @@ const templateUrls = {
     'FATSA-122': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-122.docx?alt=media&token=23307c2e-bc45-4a8a-8031-e7c452664d0f',
     'FATSA-42-89': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/FATSA-42-89.docx?alt=media&token=0a6d4bef-e9f9-490f-8f9f-e26a1d3db80d',
     'OSPSA': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/OSPSA.docx?alt=media&token=5f59ee8f-a016-44bb-bdd8-aae6d03b5892',
+    'aportesconvenio': 'https://firebasestorage.googleapis.com/v0/b/estudio-juridico-9e67c.appspot.com/o/aportesconvenio.docx?alt=media&token=672106ff-cc8d-43dd-ba24-216e754a8ce7',
 };
 
 export const fillWordTemplateForFATSA = async (formData, templateName) => {
@@ -44,13 +45,17 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
         
 
         const dataToRender = {
+            vence: formData.vence,
+            apoderada: formData.apoderada,
+            fecha: formData.fecha || '',
             quienInicia: formData.quienInicia || '',
+            quienAcuerda: formData.quienAcuerda || '',
             localidad: formData.localidad || '',
             nombreDemandado: formData.nombreDemandado || '',
             domicilioDemandado: formData.domicilioDemandado || '',
             monto: formData.monto || '',
-            numeroActaInspeccion: formData.numeroActaInspeccion.join(', ') || '',
-            tieneMultiplesActas: formData.numeroActaInspeccion.length > 1,
+            numeroActaInspeccion: formData.numeroActaInspeccion ? formData.numeroActaInspeccion.join(', ') : '',
+            tieneMultiplesActas: formData.numeroActaInspeccion ? formData.numeroActaInspeccion.length > 1 : false,
             periodos: formData.periodos || '',
             numeroResolucion: formData.numeroResolucion || '',
             fechaResolucion: formData.fechaResolucion || '',
@@ -58,6 +63,7 @@ export const fillWordTemplateForFATSA = async (formData, templateName) => {
             cuit: cuit,
             personas: formData.personas,
             testigos: formData.testigos,
+            tieneMuchasCuotas: formData.cuotas ? formData.cuotas.length > 1 : false,
             cuotas: formData.cuotas,
         };
 
@@ -110,13 +116,17 @@ export const fillWordTemplate = async (formData, templateName) => {
         console.log(quienAutoriza)
         
         const dataToRender = {
+            apoderada: formData.apoderada,
+            fecha: formData.fecha || '',
             quienInicia: formData.quienInicia || '',
+            quienAcuerda: formData.quienAcuerda || '',
             localidad: formData.localidad || '',
             nombreDemandado: formData.nombreDemandado || '',
             domicilioDemandado: formData.domicilioDemandado || '',
             monto: formData.monto || '',
-            numeroActaInspeccion: formData.numeroActaInspeccion.join(', ') || '',
-            tieneMultiplesActas: formData.numeroActaInspeccion.length > 1,
+            numeroActaInspeccion: formData.numeroActaInspeccion ? formData.numeroActaInspeccion.join(', ') : '',
+            tieneMultiplesActas: formData.numeroActaInspeccion ? formData.numeroActaInspeccion.length > 1 : false,
+            tieneMuchasCuotas: formData.cuotas ? formData.cuotas.length > 1 : false,
             periodos: formData.periodos || '',
             numeroResolucion: formData.numeroResolucion || '',
             fechaResolucion: formData.fechaResolucion || '',
@@ -126,8 +136,8 @@ export const fillWordTemplate = async (formData, templateName) => {
             testigos: formData.testigos,
             cuotas: formData.cuotas,
         };
-        
-        console.log(formData.fechaResolucion)        
+
+
         doc.render(dataToRender);
 
         const out = doc.getZip().generate({

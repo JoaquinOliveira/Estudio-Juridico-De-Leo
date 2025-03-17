@@ -7,6 +7,7 @@ import AppLayout from './components/AppLayout';
 import FormSelection from './components/FormSelection';
 import OSPSA from './components/OSPSA/OSPSA';
 import FATSA from './components/FATSA/FATSA';
+import ACUERDOS from './components/ACUERDOS/ACUERDOS';
 import Login from './components/Login/Login'
 import AppFooter from './components/AppFooter';
 import DarkLightTheme from './hooks/DarkLightTheme';
@@ -38,13 +39,15 @@ const App = () => {
         return <OSPSA onBack={handleBack} />;
       case 'FATSA':
         return <FATSA onBack={handleBack} />;
+      case 'ACUERDOS':
+        return <ACUERDOS onBack={handleBack} />;
+
       default:
         return <FormSelection onSelectForm={handleSelectForm} darkMode={darkMode} />;
     }
   };
 
   return (
-
     <ConfigProvider
       theme={{
         algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,

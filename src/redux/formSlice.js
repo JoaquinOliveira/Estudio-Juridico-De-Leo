@@ -60,6 +60,7 @@ export const handleSubmitForFATSA = createAsyncThunk(
         dispatch(setSubmitting(true));
         try {
             const templateName = values.tipoDemanda;
+            console.log(templateName)
             dispatch(setLoadingTemplate(true));
             const modifiedDocument = await fillWordTemplateForFATSA(values, templateName);
             downloadBlob(modifiedDocument, `${templateName}_modificado.docx`);
@@ -79,6 +80,7 @@ export const generatePreviewForFATSA = createAsyncThunk(
         dispatch(setSubmitting(true));
         try {
             const templateName = values.tipoDemanda;
+            console.log(templateName)
             dispatch(setLoadingTemplate(true));
             const modifiedDocument = await fillWordTemplateForFATSA(values, templateName);
             
